@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans:400,700');
+
+:root {
+    --font-base: 14px;
+    --color-dark-gray: #666;
+}
+
+html,
+body {
+    font-family: 'PT Sans', sans-serif;
+    font-size: var(--font-base);
+    color: var(--color-dark-gray);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

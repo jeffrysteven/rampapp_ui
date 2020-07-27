@@ -1,0 +1,56 @@
+{
+    "env": {
+        "browser": true,
+        "es2020": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "complexity": ["error", 2],
+        "react/display-name": true,
+        "max-line": true,
+        "new-parens": ["error", "always"],
+        "newline-before-return": "error",
+        "no-consecutive-blank-lines": true,
+        "no-console": ["error", {
+            "allow": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]}
+            ],
+        "no-const-assign": "error",
+        "no-debugger": "error",
+        "no-duplicate-imports": "error",
+        "no-duplicate-case": "error",
+        "no-empty-function": "error",
+        "no-eval": "error",
+        "no-shadow": "error",
+        "no-trailing-spaces": "error",
+        "no-unused-expressions": "error",
+        "no-unused-variables": "error",
+        "no-var": "warn",
+        "prefer-const": "error",
+        "quotemark": [
+            true,
+            "single",
+            "jsx-double"
+        ],
+        "semi": "error"
+    }
+}
