@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const tailwindcss = require('tailwindcss');
 
 function buildConfig(configDirs) {
   return {
@@ -25,8 +24,8 @@ function buildConfig(configDirs) {
                 sourceMap: true,
                 importLoaders: 1,
               }
-            }, 
-            'postcss-loader'
+            },
+            // 'postcss-loader'
           ]
         },
         {
