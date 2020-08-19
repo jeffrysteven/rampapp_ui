@@ -23,6 +23,7 @@ import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import { useCreateProject } from '../../hooks/useCreateProject';
 import { getApiUrl } from '../../helpers/getApiUrl';
+import { ComponentCard } from '../../components/ComponentCard';
 
 function uploadFile(file) {
   const formData = new FormData();
@@ -97,7 +98,6 @@ export const YamlUpload = ({ projectId, onUploadComplete }) => {
     </div>
   );
 
-  return;
 };
 
 function rand() {
@@ -412,6 +412,23 @@ const RightPanel = ({ project }) => {
   return (
     <>
       <div>
+      <ComponentCard items={[
+          {id: 1, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 2, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 3, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 4, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 5, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 6, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 7, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 8, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 9, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 10, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 11, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 12, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 13, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 14, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          {id: 15, img: '', title: 'This is an example', description: 'This is the description of the example'},
+          ]} title="Docker Images" />
         <Card className={styles.right} variant="outlined">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
