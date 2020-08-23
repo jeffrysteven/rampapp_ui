@@ -1,0 +1,36 @@
+.componentCard {
+    background: #fff;
+    border: 1px solid #333;
+    height: 100%;
+    overflow: auto;
+    padding-top: 0;
+}
+
+.componentCard .title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.componentCard .moreIcon {
+    padding-right: 0px;
+}
+
+.componentCard .search {
+    background: #e5e5e5;
+    margin: 0;
+}
+
+.componentCard .subHeader {
+    background: inherit;
+    padding-bottom: 10px;
+}
+
+.componentCard .subHeader::before {
+    background: inherit;
+    display: block;
+    content: ' ';
+    height: 8px;
+    position: absolute;
+    top: -8px;
+    width: 100%;
+}
