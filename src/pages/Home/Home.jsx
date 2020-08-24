@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { YamlOutput } from '../../components/YamlOutput';
+import { Drawer, AppBar, Toolbar, Typography } from '@material-ui/core';
 import styles from './Home.css';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -8,7 +10,6 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -172,6 +173,65 @@ export const Home = () => {
     });
   };
 
+  const containersMock = {
+    version: 3,
+    services: {
+      db: {
+        image: 'mongo',
+        restart: 'always',
+        ports: ['27017:27017'],
+        volumes: ['~/mongo/data:/data/db'],
+        networks: ['services'],
+      },
+      api: {
+        depends_on: ['db'],
+        image: 'parseplatform/parse-server',
+        restart: 'always',
+        ports: ['1337:1337'],
+        networks: ['services', 'gateway'],
+        environment: [
+          'PARSE_SERVER_APPLICATION_ID',
+          'PARSE_SERVER_MASTER_KEY',
+          'PARSE_SERVER_DATABASE_URI',
+        ],
+      },
+      dashboard: {
+        depends_on: ['api'],
+        image: 'parseplatform/parse-dashboard',
+        restart: 'always',
+        ports: ['4040:4040'],
+        networks: ['gateway'],
+        environment: [
+          'PARSE_DASHBOARD_SERVER_URL',
+          'PARSE_DASHBOARD_APP_ID',
+          'PARSE_DASHBOARD_MASTER_KEY',
+          'PARSE_DASHBOARD_APP_NAME',
+          'PARSE_DASHBOARD_ALLOW_INSECURE_HTTP',
+          'PARSE_DASHBOARD_USER_ID',
+          'PARSE_DASHBOARD_USER_PASSWORD',
+        ],
+      },
+      rest: {
+        build: '.',
+        restart: 'always',
+        depends_on: ['api'],
+        ports: ['80:3000'],
+        networks: ['gateway'],
+        environment: ['PARSE_SERVER_URL'],
+        volumes: ['.:/opt/app', '/opt/app/node_modules'],
+      },
+    },
+    networks: {
+      services: {
+        driver: 'bridge',
+        internal: true,
+      },
+      gateway: {
+        driver: 'bridge',
+      },
+    },
+  };
+
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">New Project</h2>
@@ -210,6 +270,13 @@ export const Home = () => {
   return (
     <div className={styles.wrapper}>
       <div>
+        <AppBar position="fixed" className={styles.appbar}>
+          <Toolbar>
+            <Typography variant="h6" noWrap>
+              RampApp
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <Card className={styles.left}>
           <CardActionArea>
             <div className="wraperlogo">
@@ -286,9 +353,12 @@ export const Home = () => {
             <Typography gutterBottom variant="h5" component="h2">
               Docker Images
             </Typography>
+            <main className={styles.content}>
+              <YamlOutput json={containersMock} />
+            </main>
           </CardContent>
         </Card>
-        <Card className={styles.right} variant="outlined">
+        <Card className={styles.right_down} variant="outlined">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Docker Images
