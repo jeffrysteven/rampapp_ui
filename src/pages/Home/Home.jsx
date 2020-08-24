@@ -288,8 +288,9 @@ export const Home = () => {
             </div>
             <CardContent>
               <Typography variant="body2" color="textSecondary" component="p">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                we are creating RampApp: A Web Application integrated with the
+                most popular IDEs, that allows the Local Development
+                Environments setup and management in a fast way
               </Typography>
             </CardContent>
           </CardActionArea>
