@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:js",
     "build:js": "webpack -p --env=prod",
-    "start": "webpack-dev-server --hot --mode development --env.API_URL=http://localhost:3002",
+    "start": "webpack-dev-server --hot --mode development --env.API_URL=http://54.157.141.205:4040/apps/Ramp_App_API/browser/",
     "test": "jest"
   },
   "keywords": [
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "classnames": "^2.2.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
