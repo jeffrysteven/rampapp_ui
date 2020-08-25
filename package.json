@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:js",
     "build:js": "webpack -p --env=prod",
-    "start": "webpack-dev-server --hot --mode development --env.API_URL=http://54.157.141.205:4040/apps/Ramp_App_API/browser/",
+    "start": "webpack-dev-server --hot --mode development --env.API_URL=http://54.157.141.205",
     "test": "jest"
   },
   "keywords": [

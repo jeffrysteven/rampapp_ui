@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { YamlOutput } from '../../components/YamlOutput';
-import { Drawer, AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import styles from './Home.css';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -22,6 +22,83 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import { useCreateProject } from '../../hooks/useCreateProject';
+import { getApiUrl } from '../../helpers/getApiUrl';
+
+function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('fileName', file.name);
+  formData.append('file', file);
+  const apiUrl = getApiUrl();
+  return fetch(`${apiUrl}/files`, {
+    method: 'POST',
+    body: formData,
+  }).then((res) => res.json());
+}
+
+function patchProject(projectId, newData) {
+  const apiUrl = getApiUrl();
+  return fetch(`${apiUrl}/api/Project/${projectId}`, {
+    method: 'PUT',
+    body: JSON.stringify(newData),
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  });
+}
+
+export const YamlUpload = ({ projectId, onUploadComplete }) => {
+  const [file, setFile] = useState(null);
+  const inputRef = useRef();
+
+  function uploadFileAndAssociate() {
+    uploadFile(file).then((fileResponse) => {
+      patchProject(projectId, { docker_compose_yml: fileResponse });
+      onUploadComplete(fileResponse);
+    });
+  }
+
+  if (!file) {
+    return (
+      <label htmlFor="fileUpload">
+        <input
+          ref={inputRef}
+          style={{ display: 'none' }}
+          id="fileUpload"
+          name="fileUpload"
+          type="file"
+          onChange={() => {
+            if (inputRef.current.files.length) {
+              setFile(inputRef.current.files[0]);
+            }
+          }}
+          accept=".yml"
+        />
+
+        <Button variant="contained" component="span">
+          Seleccionar docker-compose.yml
+        </Button>
+      </label>
+    );
+  }
+
+  return (
+    <div>
+      <div>{file.name}</div>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={uploadFileAndAssociate}
+      >
+        Subir
+      </Button>
+      <Button style={{ marginLeft: '1rem' }} onClick={() => setFile(null)}>
+        Cancelar
+      </Button>
+    </div>
+  );
+
+  return;
+};
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -70,6 +147,7 @@ export const Home = () => {
   const [modalStyle] = React.useState(getModalStyle);
   const [openCreateModal, setOpenCreateModal] = React.useState(false);
   const { create, isLoading: isloadingProject } = useCreateProject();
+  const [currentProject, setCurrentProject] = useState(null);
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const [projectRepo, setProjectRepo] = useState('');
@@ -126,7 +204,8 @@ export const Home = () => {
 
   useEffect(() => {
     setAppState({ loading: true });
-    const apiUrl = `http://54.157.141.205/api/Project`;
+
+    const apiUrl = `${getApiUrl()}/api/Project`;
     fetch(apiUrl)
       .then((res) => res.json())
       .then((projects) => {
@@ -171,65 +250,6 @@ export const Home = () => {
         setOpenCreateModal(false);
       }
     });
-  };
-
-  const containersMock = {
-    version: 3,
-    services: {
-      db: {
-        image: 'mongo',
-        restart: 'always',
-        ports: ['27017:27017'],
-        volumes: ['~/mongo/data:/data/db'],
-        networks: ['services'],
-      },
-      api: {
-        depends_on: ['db'],
-        image: 'parseplatform/parse-server',
-        restart: 'always',
-        ports: ['1337:1337'],
-        networks: ['services', 'gateway'],
-        environment: [
-          'PARSE_SERVER_APPLICATION_ID',
-          'PARSE_SERVER_MASTER_KEY',
-          'PARSE_SERVER_DATABASE_URI',
-        ],
-      },
-      dashboard: {
-        depends_on: ['api'],
-        image: 'parseplatform/parse-dashboard',
-        restart: 'always',
-        ports: ['4040:4040'],
-        networks: ['gateway'],
-        environment: [
-          'PARSE_DASHBOARD_SERVER_URL',
-          'PARSE_DASHBOARD_APP_ID',
-          'PARSE_DASHBOARD_MASTER_KEY',
-          'PARSE_DASHBOARD_APP_NAME',
-          'PARSE_DASHBOARD_ALLOW_INSECURE_HTTP',
-          'PARSE_DASHBOARD_USER_ID',
-          'PARSE_DASHBOARD_USER_PASSWORD',
-        ],
-      },
-      rest: {
-        build: '.',
-        restart: 'always',
-        depends_on: ['api'],
-        ports: ['80:3000'],
-        networks: ['gateway'],
-        environment: ['PARSE_SERVER_URL'],
-        volumes: ['.:/opt/app', '/opt/app/node_modules'],
-      },
-    },
-    networks: {
-      services: {
-        driver: 'bridge',
-        internal: true,
-      },
-      gateway: {
-        driver: 'bridge',
-      },
-    },
   };
 
   const body = (
@@ -327,7 +347,11 @@ export const Home = () => {
             <CardContent>
               <List component="nav" aria-label="main mailbox folders">
                 {appState?.projects?.map((project) => (
-                  <ListItem ListItem button key={`item-${project.objectId}`}>
+                  <ListItem
+                    button
+                    key={`item-${project.objectId}`}
+                    onClick={() => setCurrentProject(project)}
+                  >
                     <ListItemIcon>
                       <DashboardIcon />
                     </ListItemIcon>
@@ -348,15 +372,52 @@ export const Home = () => {
           </CardActions>
         </Card>
       </div>
+      {!currentProject && <div>Select a project on the left</div>}
+      {currentProject && <RightPanel project={currentProject} />}
+    </div>
+  );
+};
+
+const RightPanel = ({ project }) => {
+  const [dockerComposeYmlUrl, setDockerComposeYmlUrl] = useState();
+
+  const [ymlContent, setYmlContent] = useState(null);
+
+  useEffect(
+    function () {
+      setYmlContent(null);
+      setDockerComposeYmlUrl(project.docker_compose_yml?.url);
+    },
+    [project.objectId],
+  );
+
+  useEffect(
+    function fetchYaml() {
+      if (dockerComposeYmlUrl) {
+        fetch(dockerComposeYmlUrl)
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Unable to fetch yml');
+            }
+            return res.text().catch(() => {
+              throw new Error('Unable to decode file');
+            });
+          })
+          .then((content) => setYmlContent(content));
+      }
+    },
+    [dockerComposeYmlUrl],
+  );
+
+  return (
+    <>
       <div>
         <Card className={styles.right} variant="outlined">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Docker Images
             </Typography>
-            <main className={styles.content}>
-              <YamlOutput json={containersMock} />
-            </main>
+            <main className={styles.content}></main>
           </CardContent>
         </Card>
         <Card className={styles.right_down} variant="outlined">
@@ -371,11 +432,16 @@ export const Home = () => {
         <Card className={styles.design} variant="outlined">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-              Project Design
+              <YamlUpload
+                projectId={project.objectId}
+                onUploadComplete={(ymlObject) => setDockerComposeYml(ymlObject.url)}
+              ></YamlUpload>
+              <div style={{ marginTop: '1rem' }}></div>
+              {ymlContent && <YamlOutput yml={ymlContent} />}
             </Typography>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </>
   );
 };
