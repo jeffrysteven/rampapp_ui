@@ -87062,7 +87062,7 @@ body {
 
 .Home__right__1yP20 {
   width: 450;
-  height: 400;
+  height: 820;
   margin: 20;
   margin-top: 40;
 }
@@ -87145,6 +87145,41 @@ body {
   display: flex;
 }
 
+.ComponentListItem__moreIcon__23lzd {
+  padding-right: 0px;
+}
+.ComponentCard__componentCard__2vacb {
+  background: #fff;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 0;
+}
+
+.ComponentCard__componentCard__2vacb .ComponentCard__title__gtQF0 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.ComponentCard__componentCard__2vacb .ComponentCard__search__BWz-s {
+  background: #e5e5e5;
+  margin: 0;
+}
+
+.ComponentCard__componentCard__2vacb .ComponentCard__subHeader__Oz-pX {
+  background: #fff;
+  padding-bottom: 10px;
+}
+
+.ComponentCard__componentCard__2vacb .ComponentCard__subHeader__Oz-pX::before {
+  background: inherit;
+  display: block;
+  content: ' ';
+  height: 8px;
+  position: absolute;
+  top: -8px;
+  width: 100%;
+}
 .Navigation__menu__17W9R {
   display: flex;
   list-style: none;
@@ -87156,6 +87191,10 @@ body {
   margin: 0.25rem 1rem;
 }
 
+
+/*@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";*/
 
 :root {
   --font-base: 14px;
