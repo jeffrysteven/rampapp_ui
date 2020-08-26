@@ -1,8 +1,8 @@
 .componentCard {
     background: #fff;
-    border: 1px solid #333;
     height: 100%;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding-top: 0;
 }
 
@@ -11,17 +11,13 @@
     margin: 0;
 }
 
-.componentCard .moreIcon {
-    padding-right: 0px;
-}
-
 .componentCard .search {
     background: #e5e5e5;
     margin: 0;
 }
 
 .componentCard .subHeader {
-    background: inherit;
+    background: #fff;
     padding-bottom: 10px;
 }
 

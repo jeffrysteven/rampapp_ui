@@ -13,7 +13,7 @@
 
 .right {
   width: 450;
-  height: 400;
+  height: 820;
   margin: 20;
   margin-top: 40;
 }
@@ -35,7 +35,6 @@
 .media {
   @apply mx-1 mt-16;
   height: 55;
-
   width: 188px;
   height: 33px;
   left: 16px;

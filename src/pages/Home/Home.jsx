@@ -30,6 +30,7 @@ function uploadFile(file) {
   formData.append('fileName', file.name);
   formData.append('file', file);
   const apiUrl = getApiUrl();
+
   return fetch(`${apiUrl}/files`, {
     method: 'POST',
     body: formData,
@@ -38,6 +39,7 @@ function uploadFile(file) {
 
 function patchProject(projectId, newData) {
   const apiUrl = getApiUrl();
+
   return fetch(`${apiUrl}/api/Project/${projectId}`, {
     method: 'PUT',
     body: JSON.stringify(newData),
@@ -97,7 +99,6 @@ export const YamlUpload = ({ projectId, onUploadComplete }) => {
       </Button>
     </div>
   );
-
 };
 
 function rand() {
@@ -380,7 +381,7 @@ export const Home = () => {
 
 const RightPanel = ({ project }) => {
   const [dockerComposeYmlUrl, setDockerComposeYmlUrl] = useState();
-
+  const [selectedVsCodeExtensions, setSelectedVsCodeExtensions] = useState([]);
   const [ymlContent, setYmlContent] = useState(null);
 
   useEffect(
@@ -399,6 +400,7 @@ const RightPanel = ({ project }) => {
             if (!res.ok) {
               throw new Error('Unable to fetch yml');
             }
+
             return res.text().catch(() => {
               throw new Error('Unable to decode file');
             });
@@ -412,38 +414,12 @@ const RightPanel = ({ project }) => {
   return (
     <>
       <div>
-      <ComponentCard items={[
-          {id: 1, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 2, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 3, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 4, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 5, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 6, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 7, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 8, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 9, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 10, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 11, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 12, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 13, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 14, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          {id: 15, img: '', title: 'This is an example', description: 'This is the description of the example'},
-          ]} title="Docker Images" />
-        <Card className={styles.right} variant="outlined">
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Docker Images
-            </Typography>
-            <main className={styles.content}></main>
-          </CardContent>
-        </Card>
-        <Card className={styles.right_down} variant="outlined">
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Docker Images
-            </Typography>
-          </CardContent>
-        </Card>
+        <ComponentCard
+          getSelectedItems={setSelectedVsCodeExtensions}
+          className={styles.right}
+          items={selectedVsCodeExtensions}
+          title="Visual Studio Code extensions"
+        />
       </div>
       <div>
         <Card className={styles.design} variant="outlined">
@@ -451,7 +427,9 @@ const RightPanel = ({ project }) => {
             <Typography gutterBottom variant="h5" component="h2">
               <YamlUpload
                 projectId={project.objectId}
-                onUploadComplete={(ymlObject) => setDockerComposeYml(ymlObject.url)}
+                onUploadComplete={(ymlObject) =>
+                  setDockerComposeYml(ymlObject.url)
+                }
               ></YamlUpload>
               <div style={{ marginTop: '1rem' }}></div>
               {ymlContent && <YamlOutput yml={ymlContent} />}

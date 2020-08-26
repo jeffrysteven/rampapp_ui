@@ -3,7 +3,7 @@
         "browser": true,
         "es2020": true,
         "node": true,
-        "amd": true,
+        "amd": true
     },
     "extends": [
         "eslint:recommended",
@@ -21,11 +21,8 @@
     ],
     "rules": {
         "complexity": ["error", 2],
-        "react/display-name": true,
-        "max-line": true,
         "new-parens": ["error", "always"],
         "newline-before-return": "error",
-        "no-consecutive-blank-lines": true,
         "no-console": ["error", {
             "allow": [
                 "debug",
@@ -35,7 +32,7 @@
                 "timeEnd",
                 "trace"
             ]}
-            ],
+        ],
         "no-const-assign": "error",
         "no-debugger": "error",
         "no-duplicate-imports": "error",
@@ -45,14 +42,9 @@
         "no-shadow": "error",
         "no-trailing-spaces": "error",
         "no-unused-expressions": "error",
-        "no-unused-variables": "error",
+        "no-unused-vars": "error",
         "no-var": "warn",
         "prefer-const": "error",
-        "quotemark": [
-            true,
-            "single",
-            "jsx-double"
-        ],
         "semi": "error"
     }
 }

@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 function buildConfig(configDirs) {
   return {
     entry: {
-      index: configDirs.APP_DIR + '/index.jsx',
+      index: ["@babel/polyfill", configDirs.APP_DIR + '/index.jsx'],
     },
     resolve: {
       extensions: ['.js', '.jsx', '.css']
@@ -25,7 +25,7 @@ function buildConfig(configDirs) {
                 importLoaders: 1,
               }
             },
-            // 'postcss-loader'
+            'postcss-loader'
           ]
         },
         {

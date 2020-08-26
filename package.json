@@ -16,8 +16,10 @@
   "homepage": "/rampapp_ui",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "classnames": "^2.2.6",
     "prism-react-renderer": "^1.1.1",
     "react": "^16.13.1",
