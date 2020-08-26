@@ -1,3 +1,3 @@
 export function getApiUrl(){
-    return process.env.API_URL;
+    return 'http://54.157.141.205';
 }
