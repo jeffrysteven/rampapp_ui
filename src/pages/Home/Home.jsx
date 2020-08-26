@@ -23,12 +23,14 @@ import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import { useCreateProject } from '../../hooks/useCreateProject';
 import { getApiUrl } from '../../helpers/getApiUrl';
+import { ComponentCard } from '../../components/ComponentCard';
 
 function uploadFile(file) {
   const formData = new FormData();
   formData.append('fileName', file.name);
   formData.append('file', file);
   const apiUrl = getApiUrl();
+
   return fetch(`${apiUrl}/files`, {
     method: 'POST',
     body: formData,
@@ -37,6 +39,7 @@ function uploadFile(file) {
 
 function patchProject(projectId, newData) {
   const apiUrl = getApiUrl();
+
   return fetch(`${apiUrl}/api/Project/${projectId}`, {
     method: 'PUT',
     body: JSON.stringify(newData),
@@ -96,8 +99,6 @@ export const YamlUpload = ({ projectId, onUploadComplete }) => {
       </Button>
     </div>
   );
-
-  return;
 };
 
 function rand() {
@@ -380,7 +381,7 @@ export const Home = () => {
 
 const RightPanel = ({ project }) => {
   const [dockerComposeYmlUrl, setDockerComposeYmlUrl] = useState();
-
+  const [selectedVsCodeExtensions, setSelectedVsCodeExtensions] = useState([]);
   const [ymlContent, setYmlContent] = useState(null);
 
   useEffect(
@@ -399,6 +400,7 @@ const RightPanel = ({ project }) => {
             if (!res.ok) {
               throw new Error('Unable to fetch yml');
             }
+
             return res.text().catch(() => {
               throw new Error('Unable to decode file');
             });
@@ -412,21 +414,12 @@ const RightPanel = ({ project }) => {
   return (
     <>
       <div>
-        <Card className={styles.right} variant="outlined">
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Docker Images
-            </Typography>
-            <main className={styles.content}></main>
-          </CardContent>
-        </Card>
-        <Card className={styles.right_down} variant="outlined">
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Docker Images
-            </Typography>
-          </CardContent>
-        </Card>
+        <ComponentCard
+          getSelectedItems={setSelectedVsCodeExtensions}
+          className={styles.right}
+          items={selectedVsCodeExtensions}
+          title="Visual Studio Code extensions"
+        />
       </div>
       <div>
         <Card className={styles.design} variant="outlined">
@@ -434,7 +427,9 @@ const RightPanel = ({ project }) => {
             <Typography gutterBottom variant="h5" component="h2">
               <YamlUpload
                 projectId={project.objectId}
-                onUploadComplete={(ymlObject) => setDockerComposeYml(ymlObject.url)}
+                onUploadComplete={(ymlObject) =>
+                  setDockerComposeYml(ymlObject.url)
+                }
               ></YamlUpload>
               <div style={{ marginTop: '1rem' }}></div>
               {ymlContent && <YamlOutput yml={ymlContent} />}

@@ -1,11 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const tailwindcss = require('tailwindcss');
 
 function buildConfig(configDirs) {
   return {
     entry: {
-      index: configDirs.APP_DIR + '/index.jsx',
+      index: ["@babel/polyfill", configDirs.APP_DIR + '/index.jsx'],
     },
     resolve: {
       extensions: ['.js', '.jsx', '.css']
@@ -25,7 +24,7 @@ function buildConfig(configDirs) {
                 sourceMap: true,
                 importLoaders: 1,
               }
-            }, 
+            },
             'postcss-loader'
           ]
         },
