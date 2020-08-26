@@ -13,6 +13,7 @@
     "react"
   ],
   "author": "Julian Arana",
+  "homepage": "/rampapp_ui",
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
