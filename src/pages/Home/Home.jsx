@@ -428,7 +428,7 @@ const RightPanel = ({ project }) => {
               <YamlUpload
                 projectId={project.objectId}
                 onUploadComplete={(ymlObject) =>
-                  setDockerComposeYml(ymlObject.url)
+                  setDockerComposeYmlUrl(ymlObject.url)
                 }
               ></YamlUpload>
               <div style={{ marginTop: '1rem' }}></div>
